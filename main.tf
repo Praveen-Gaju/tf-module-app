@@ -109,5 +109,5 @@ resource "aws_route53_record" "main" {
   name    = "${var.component}-${var.env}.${var.dns_domain}"
   type    = "CNAME"
   ttl     = 30
-  records = var.alb_dns_name
+  records = [var.alb_dns_name]
 }

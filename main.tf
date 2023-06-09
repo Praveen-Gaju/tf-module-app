@@ -54,6 +54,8 @@ resource "aws_security_group" "main" {
   description = "${var.component}-${var.env}"
   vpc_id      = var.vpc_id
 
+
+  #for allowing workstation ip
   ingress {
     description      = "SSH"
     from_port        = 22
@@ -62,12 +64,22 @@ resource "aws_security_group" "main" {
     cidr_blocks      = var.bastion_cidr
   }
 
+  #for allowing apps to communicate each other
   ingress {
     description      = "APP"
     from_port        = var.port
     to_port          = var.port
     protocol         = "tcp"
     cidr_blocks      = var.allow_app_to
+  }
+
+  #for allowing prometheus server to reach app
+  ingress {
+    description      = "PROMETHEUS"
+    from_port        = 9100
+    to_port          = 9100
+    protocol         = "tcp"
+    cidr_blocks      = var.monitoring_nodes
   }
 
   egress {

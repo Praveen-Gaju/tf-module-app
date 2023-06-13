@@ -49,6 +49,19 @@ resource "aws_autoscaling_group" "main" {
   }
 }
 
+#autoscaling group policy
+resource "aws_autoscaling_policy" "asg-cpu-rule" {
+  autoscaling_group_name = aws_autoscaling_group.main.name
+  name                   = "CPUUtilizationTrackingPolicy"
+  policy_type            = "TargetTrackingScaling"
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 50.0
+  }
+}
+
 
 resource "aws_security_group" "main" {
   name        = "${var.component}-${var.env}"

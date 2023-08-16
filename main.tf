@@ -22,6 +22,14 @@ resource "aws_launch_template" "main" {
       { Name = "${var.component}-${var.env}", Monitor = "yes" }
     )
   }
+  tag_specifications {
+    resource_type = "spot-instance-request"
+
+    tags       = merge(
+      var.tags,
+      { Name = "${var.component}-${var.env}", Monitor = "yes" }
+    )
+  }
 
   user_data = base64encode(templatefile("${path.module}/userdata.sh",{
     component = var.component
